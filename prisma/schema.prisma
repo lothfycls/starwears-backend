@@ -1,0 +1,247 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  fullName    String?
+  familyName  String?
+  phoneNumber String?
+  password    String
+  urlPhoto    String   @default("https://www.pngfind.com/pngs/m/676-6764065_default-profile-picture-transparent-hd-png-download.png")
+  gender      Gender   @default(Male)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Banner {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  image       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+}
+
+model Client {
+  id               Int       @id @default(autoincrement())
+  first_name       String?
+  last_name        String?
+  twoFactorAuth    Boolean   @default(false)
+  phone_number     String?   @unique
+  email            String?   @unique
+  password         String?
+  method_auth      Auth_Type @default(EMAIL)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  last_seen        DateTime  @default(now())
+  gender           Gender    @default(Male)
+  address          String?
+  orders           Order[]
+  PurchasedProduct Product[]
+  bids             Bid[]
+}
+
+model Otp_code {
+  id        Int       @id @default(autoincrement())
+  id_user   Int
+  code      Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Order {
+  id               Int          @id @default(autoincrement())
+  ownerId          Int?
+  CreatedAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  payment_way      PaymentWay   @default(CARD)
+  order_status     OrderState   @default(PENDING)
+  receiver_name    String?
+  receiver_phone   String?
+  shipping_address String?
+  client_comment   String?
+  shipping_cost    Float?
+  total            Float
+  orderNumber      Int
+  owner            Client?      @relation(fields: [ownerId], references: [id])
+  product_id       Int?
+  product          Product?     @relation(fields: [productId], references: [id])
+  productId        Int?
+  orderItems       OrderItems[]
+
+  @@index([ownerId], map: "Order_clientId_fkey")
+}
+
+model OrderItems {
+  id            Int     @id @default(autoincrement())
+  quantity      Int     @default(1)
+  product_id    Int?
+  product_image String?
+  orderId       Int?
+  Order         Order?  @relation(fields: [orderId], references: [id])
+
+  @@index([orderId], map: "OrderItems_orderId_fkey")
+}
+
+model Celebrity {
+  id          Int               @id @default(autoincrement())
+  name        String
+  description String?
+  profession  String?
+  email       String?
+  phoneNumber String?
+  password    String?
+  signed      Boolean           @default(false)
+  urlPictures CelebrityImages[]
+  products    Product[]
+}
+
+model CelebrityImages {
+  id          Int        @id @default(autoincrement())
+  celebrityId Int?
+  url         String
+  Celebrity   Celebrity? @relation(fields: [celebrityId], references: [id])
+
+  @@index([celebrityId], map: "CelebrityImages_celebrityId_fkey")
+}
+
+model Product {
+  id                Int            @id @default(autoincrement())
+  name              String
+  description       String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime?      @updatedAt
+  state             ProductState   @default(Active)
+  views             Int            @default(0)
+  categoryId        Int?
+  ownerId           Int?
+  auctionBegin      DateTime       @default(now())
+  auctionEnd        DateTime
+  winClientId       Int?
+  condition         String?        @default("Good")
+  lastPrice         Float?         @default(0)
+  bids              Bid[]
+  category          Category?      @relation(fields: [categoryId], references: [id])
+  owner             Celebrity?     @relation(fields: [ownerId], references: [id])
+  client_win        Client?        @relation(fields: [winClientId], references: [id])
+  productImages     ProductImage[]
+  brand             Brand?         @relation(fields: [brandId], references: [id])
+  brandId           Int?
+  Size              String?
+  department        Department     @default(MEN)
+  closure           Closure        @default(ZIP)
+  Material          String?
+  Color             String?
+  Interior_Material String?
+  Interior_Color    String?
+  Order             Order[]
+
+  @@index([categoryId], map: "Product_categoryId_fkey")
+  @@index([ownerId], map: "Product_ownerId_fkey")
+  @@index([winClientId], map: "Product_winClientId_fkey")
+}
+
+enum Department {
+  MEN
+  WOMEN
+  KIDS
+}
+
+enum Closure {
+  ZIP
+  BUTTON
+  CLOSED
+}
+
+model ProductImage {
+  id        Int      @id @default(autoincrement())
+  productId Int?
+  url       String   @db.VarChar(1900)
+  Product   Product? @relation(fields: [productId], references: [id])
+
+  @@index([productId], map: "ProductImage_productId_fkey")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?   @db.VarChar(2000)
+  image_url   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  products    Product[]
+
+  //relation category-parent category
+  parent_id       Int?
+  parent_category Category?  @relation("ParentCategoryCategory", fields: [parent_id], references: [id])
+  categories      Category[] @relation("ParentCategoryCategory")
+}
+
+model Bid {
+  id        Int       @id @default(autoincrement())
+  productId Int?
+  bidAmount Float
+  bid_date  DateTime
+  state     BidState  @default(ACTIVE)
+  product   Product?  @relation(fields: [productId], references: [id])
+  client    Client?   @relation(fields: [clientId], references: [id])
+  clientId  Int?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+
+  @@index([productId], map: "Bid_productId_fkey")
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum ProductState {
+  Active
+  Desactive
+  Sold
+  OUT
+}
+
+enum OrderState {
+  CANCELLED
+  PENDING
+  PAID
+  DELIVERD
+}
+
+enum PaymentWay {
+  PAYPAL
+  CARD
+}
+
+enum Auth_Type {
+  EMAIL
+  FACEBOOK
+  GOOGLE
+}
+
+enum BidState {
+  ACTIVE
+  CANCELLED
+  PASSED
+  WINNED
+}
+
+model Brand {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(1000)
+  image     String?   @db.VarChar(1000)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
