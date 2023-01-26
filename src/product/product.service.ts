@@ -34,8 +34,25 @@ export class ProductService {
     return newProduct;
   }
 
-  async findAll() {
-    const products= await this.prisma.product.findMany()
+  async findAll(){
+
+  }
+
+  async findAllActive() {
+    const products= await this.prisma.product.findMany({
+      where:{
+        state:'Active'  
+      }
+    })
+    return products;
+  }
+
+  async findAllEnded(){
+    const products= await this.prisma.product.findMany({
+      where:{
+        state:'Sold'  
+      }
+    })
     return products;
   }
 
@@ -52,17 +69,154 @@ export class ProductService {
     const products= await this.prisma.product.findMany({
       where:{
         ownerId:idCelebrity,
+      },
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
       }
     }) 
     return products;
   }
 
   async findTrendingProduct(){
+    const dateNow= new Date();
+    const AfterFiveHours= new Date();
+    AfterFiveHours.setHours(AfterFiveHours.getHours() + 5);
+    const products= await this.prisma.product.findMany({
+      where:{
+        OR:[{
+          AND:[
+            {
+              state:'Active'
+            },
+            {
+              auctionBegin:{
+                lt: dateNow,
+              }
+            },
+            {
+              auctionEnd:{
+                gt:dateNow,
+              }
+            }
+          ]
+          
+         },
+         {
+          AND:[
+            {
+              state:'Sold'
+            },
+            {
+              auctionBegin:{
+                lt: AfterFiveHours,
+              }
+            },
+            {
+              auctionEnd:{
+                gt:AfterFiveHours,
+              }
+            }
+          ]
+          
+         }
+        ]
+      }
+      ,
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
+      }
+      
+    })
 
+    return products;
   }
 
+
+
+
   async findAllUpcommingProduct(){
-    
+    const dateNow= new Date();
+    const products= await this.prisma.product.findMany({
+      where:{
+        
+          AND:[
+            {
+              state:'COMMING'
+            },
+            {
+              auctionBegin:{
+                gt: dateNow,
+              }
+            },
+            {
+              auctionEnd:{
+                gt:dateNow,
+              }
+            }
+          ]
+          
+         
+      },
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
+      }
+    })
+
+    return products;
   }
 
   async getStateUserForProduct(userId:number, productId:number){
@@ -120,6 +274,27 @@ export class ProductService {
     const products= await this.prisma.product.findMany({
       where:{
         winClientId:idClientId,
+      },
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
       }
     })
 
@@ -128,7 +303,28 @@ export class ProductService {
 
   async findOne(id: number) {
     const products= await this.prisma.product.findUnique({
-      where:{id:id}
+      where:{id:id},
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
+      }
     })
     return products;
   }

@@ -46,6 +46,7 @@ model Client {
   orders           Order[]
   PurchasedProduct Product[]
   bids             Bid[]
+  highestBid       Product[] @relation(name: "LastBids")
 }
 
 model Otp_code {
@@ -127,10 +128,10 @@ model Product {
   winClientId       Int?
   condition         String?        @default("Good")
   lastPrice         Float?         @default(0)
+  lastBidId         Int?
   bids              Bid[]
   category          Category?      @relation(fields: [categoryId], references: [id])
   owner             Celebrity?     @relation(fields: [ownerId], references: [id])
-  client_win        Client?        @relation(fields: [winClientId], references: [id])
   productImages     ProductImage[]
   brand             Brand?         @relation(fields: [brandId], references: [id])
   brandId           Int?
@@ -142,6 +143,8 @@ model Product {
   Interior_Material String?
   Interior_Color    String?
   Order             Order[]
+  clientWin         Client?        @relation(fields: [winClientId], references: [id])
+  LastBidder        Client?        @relation(name: "LastBids", fields: [lastBidId], references: [id])
 
   @@index([categoryId], map: "Product_categoryId_fkey")
   @@index([ownerId], map: "Product_ownerId_fkey")

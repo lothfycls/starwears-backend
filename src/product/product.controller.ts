@@ -2,9 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ForbiddenException }
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Public } from 'src/common/decorators';
 
 
 const states:string[]= ["active","desactive"]
+
+@Public()
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -37,14 +40,17 @@ export class ProductController {
   }
 
 
-  @Get("closed/findall")
+  
+
+
+  @Get("/end/findall")
   findAllClosed() {
-    return this.productService.findAll();
+    return this.productService.findAllEnded();
   }
 
-  @Get("opened/findall")
+  @Get("active/findall")
   findAllOpened() {
-    return this.productService.findAll();
+    return this.productService.findAllActive();
   }
 
 
