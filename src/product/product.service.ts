@@ -57,6 +57,14 @@ export class ProductService {
     return products;
   }
 
+  async findTrendingProduct(){
+
+  }
+
+  async findAllUpcommingProduct(){
+    
+  }
+
   async getStateUserForProduct(userId:number, productId:number){
     const  product= await this.prisma.product.findUnique({
       where:{

@@ -24,6 +24,19 @@ export class ProductController {
     return this.productService.getStateUserForProduct(+userId, +productId)
   }
 
+
+  @Get("trends/findall")
+  findAllTrendingProduct(){
+    return this.productService.findTrendingProduct();
+  }
+
+
+  @Get("upcoming/findall")
+  findAllUpcommingProduct(){
+    return this.productService.findAllUpcommingProduct()
+  }
+
+
   @Get("closed/findall")
   findAllClosed() {
     return this.productService.findAll();
