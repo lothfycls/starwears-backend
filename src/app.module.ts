@@ -13,9 +13,10 @@ import { BrandModule } from './brand/brand.module';
 import { PlanModule } from './plan/plan.module';
 import { BannerModule } from './banner/banner.module';
 import { SearchModule } from './search/search.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [AuthModule, CategoryModule, BidModule, ProductModule, OrderModule, CelebrityModule, UsersModule, PaymentModule, BrandModule, PlanModule, BannerModule, SearchModule],
+  imports: [AuthModule,PrismaModule, CategoryModule, BidModule, ProductModule, OrderModule, CelebrityModule, UsersModule, PaymentModule, BrandModule, PlanModule, BannerModule, SearchModule],
   providers: [{
     provide: APP_GUARD,
     useClass: AtGuard,
