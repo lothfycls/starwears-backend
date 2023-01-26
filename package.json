@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist & npx prisma db push ",
+    "prebuild": "rimraf dist & npx prisma generate",
     "nest": "npm i -g @nestjs/cli",
     "prisma": "npx prisma db push",
     "build": "nest build",
