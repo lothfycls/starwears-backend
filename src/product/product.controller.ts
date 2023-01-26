@@ -19,6 +19,11 @@ export class ProductController {
     return this.productService.findAll();
   }
 
+  @Get('state/product/foruser/:productId/:userId')
+  getStateUser(@Param('userId') userId:string,@Param('productId') productId:string){
+    return this.productService.getStateUserForProduct(+userId, +productId)
+  }
+
   @Get("closed/findall")
   findAllClosed() {
     return this.productService.findAll();

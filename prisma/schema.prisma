@@ -72,7 +72,6 @@ model Order {
   total            Float
   orderNumber      Int
   owner            Client?      @relation(fields: [ownerId], references: [id])
-  product_id       Int?
   product          Product?     @relation(fields: [productId], references: [id])
   productId        Int?
   orderItems       OrderItems[]
@@ -210,6 +209,7 @@ enum ProductState {
   Desactive
   Sold
   OUT
+  COMMING
 }
 
 enum OrderState {
@@ -244,4 +244,11 @@ model Brand {
   products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+}
+
+enum ProductUserState {
+  WON
+  NOT
+  OUTBIDED
+  NOTOPEN
 }

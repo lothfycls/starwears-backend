@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Certificate } from 'crypto';
+import { identity } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -27,7 +28,7 @@ export class ProductService {
         auctionEnd:createProductDto.auctionEnd,
         Color:createProductDto.Color,
         auctionBegin:createProductDto.auctionBegin,
-        
+
       }
     })
     return newProduct;
@@ -56,6 +57,57 @@ export class ProductService {
     return products;
   }
 
+  async getStateUserForProduct(userId:number, productId:number){
+    const  product= await this.prisma.product.findUnique({
+      where:{
+        id:productId,
+      },
+      select:{
+        state:true,
+      }
+    })
+
+
+
+    if(product.state=='Active'){
+      const highestBidsOfproduct= await this.prisma.bid.findMany({
+        where:{
+          productId:productId,
+        },
+        orderBy:{
+          bidAmount:'desc'
+        },
+        take:1
+      })
+  
+      const highestBidOnProductByUser= await this.prisma.bid.findMany({
+        where:{
+          AND:[{productId:productId},
+          {
+            clientId:userId,
+          }]
+        },
+        orderBy:{
+          bidAmount:'desc'
+        },
+        take:1
+  
+      })
+    }
+    
+
+  
+
+
+
+
+    
+
+
+    
+    
+  
+  }
   async findAllProductPurchasedByClientId(idClientId:number){
     const products= await this.prisma.product.findMany({
       where:{
