@@ -89,8 +89,4 @@ export class CreateProductDto {
     Interior_Color:string;
 
 
-
-    
-    
-
 }
