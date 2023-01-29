@@ -32,11 +32,29 @@ export class BrandService {
         productImages:true,
       }
     })
+    return allProduct;
   }
 
   async findOne(id: number) {
-
-    return `This action returns a #${id} brand`;
+    const brandDetails=await this.prisma.brand.findUnique({
+      where:{
+        id:id,
+      },
+      include:{
+        products:{
+          where:{
+            state:'Active',
+          },
+          include:{
+            _count:true,
+            productImages:true,
+          }
+        },
+        _count:true,
+      }
+    })
+    
+    return brandDetails;
   }
 
   async update(id: number, updateBrandDto: UpdateBrandDto) {

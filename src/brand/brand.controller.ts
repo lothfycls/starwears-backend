@@ -10,17 +10,22 @@ import { UpdateBrandDto } from './dto/update-brand.dto';
 export class BrandController {
   constructor(private readonly brandService: BrandService) {}
 
-  @Post()
+  @Post("create")
   create(@Body() createBrandDto: CreateBrandDto) {
     return this.brandService.create(createBrandDto);
   }
 
-  @Get()
+  @Get("findall")
   findAll() {
     return this.brandService.findAll();
   }
 
-  @Get('findall/products/:id')
+  @Get("findone/:id")
+  findOne(@Param('id') id: string) {
+    return this.brandService.findOne(+id);
+  }
+
+  @Get('findbyid/products/:id')
   findProductByBrand(@Param('id') id: string) {
     return this.brandService.findAllProductbyBrand(+id);
   }

@@ -25,12 +25,12 @@ export class BannerController {
     return this.bannerService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Post('update/:id')
   update(@Param('id') id: string, @Body() updateBannerDto: UpdateBannerDto) {
     return this.bannerService.update(+id, updateBannerDto);
   }
 
-  @Delete(':id')
+  @Get(':id')
   remove(@Param('id') id: string) {
     return this.bannerService.remove(+id);
   }
