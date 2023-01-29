@@ -1,8 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Public } from 'src/common/decorators';
 import { CelebrityService } from './celebrity.service';
 import { CreateCelebrityDto } from './dto/create-celebrity.dto';
 
 
+
+@Public()
 @Controller('celebrity')
 export class CelebrityController {
   constructor(private readonly celebrityService: CelebrityService) {}

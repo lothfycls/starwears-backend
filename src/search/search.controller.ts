@@ -2,7 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SearchService } from './search.service';
 import { CreateSearchDto } from './dto/create-search.dto';
 import { UpdateSearchDto } from './dto/update-search.dto';
+import { Public } from 'src/common/decorators';
 
+
+@Public()
 @Controller('search')
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
