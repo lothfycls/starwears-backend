@@ -38,12 +38,12 @@ export class CreateProductDto {
     @IsNotEmpty()
     condition:string;
 
-    @IsString()
+    @IsString({each:true})
     @IsNotEmpty()
     productImage:string[];
 
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
     celebrityId:number;
 
