@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateBidDto } from './dto/create-bid.dto';
 import { UpdateBidDto } from './dto/update-bid.dto';
@@ -8,6 +8,23 @@ export class BidService {
   constructor(private prisma:PrismaService){}
   async create(createBidDto: CreateBidDto) {
     // i need to check product state
+
+    const product= await this.prisma.product.findUnique({
+      where:{
+        id:createBidDto.product_id,
+      },
+      select:{
+        bids:{
+          orderBy:{
+            bidAmount:"desc",
+            
+          },
+          take: 1,
+        }
+      }
+    })
+    const maxAmount = product.bids[0].bidAmount;
+    if(maxAmount>=createBidDto.amount) throw new ForbiddenException("your bid is low than the highest bid on this product")
     const now=new Date();
     const bid= await this.prisma.bid.create({
       data:{
