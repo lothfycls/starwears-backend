@@ -20,6 +20,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get("productBids/:id")
+  findAllProductBids(@Param('id') id: string){
+    return this.usersService.findAllProductBids(+id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);

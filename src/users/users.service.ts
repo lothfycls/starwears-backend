@@ -14,6 +14,51 @@ export class UsersService {
     return `This action returns all users`;
   }
 
+  async findAllProductBids(idClient:number){
+    const afterFiveDays= new Date();
+    afterFiveDays.setHours(afterFiveDays.getDay() + 5);
+    const products= await this.prisma.product.findMany({
+      where:{
+        AND:[{bids:{
+          some:{
+          clientId:idClient,
+          },
+        }},{
+          OR:[
+            {
+              state:"Active",
+            },
+            {
+              state:"OUT",
+            },
+            {
+              state:"Sold",
+              auctionEnd:{
+                lt:afterFiveDays,
+              }
+            }
+          ]
+        }]
+        
+      },
+      include:{
+        bids:{
+          orderBy:{
+            bidAmount:"desc"
+          },
+          take:1,
+        },
+        LastBidder:true,
+        productImages:true,
+        owner:true,
+      }
+
+    })
+
+    return products;
+
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }

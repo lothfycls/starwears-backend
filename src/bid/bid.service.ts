@@ -66,7 +66,7 @@ export class BidService {
   async findHighBidOnProduct(id:number){
     const highBid= await this.prisma.bid.findFirst({
       where:{
-        clientId:id,
+        productId:id,
       },
       orderBy:{
         bidAmount:'desc',

@@ -34,6 +34,7 @@ export class BidController {
     return this.bidService.findOne(+id);
   }
 
+
   @Post('update/:id')
   update(@Param('id') id: string, @Body() updateBidDto: UpdateBidDto) {
     return this.bidService.update(+id, updateBidDto);
