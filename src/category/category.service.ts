@@ -39,7 +39,7 @@ export class CategoryService {
   async findAllProductByCategory(id:number){
     const allProduct= await this.prisma.product.findMany({
       where:{
-        id:id,
+        categoryId:id,
       },
       include:{
         productImages:true,

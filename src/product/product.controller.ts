@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ForbiddenException } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { UpdateProductDto, updateProductState } from './dto/update-product.dto';
 import { Public } from 'src/common/decorators';
 
 
@@ -65,8 +65,13 @@ export class ProductController {
     return this.productService.update(+id, updateProductDto);
   }
 
-  @Get('state/update/:id/:state')
-  updateStateProduct(@Param('id') id: string,@Param("state") state:string ) {
+  @Post('state/update/:id')
+  updateStateOfProduct(@Param('id') id: string,@Body() updateState:updateProductState){
+    return this.productService.updateStateOfProduct(+id,updateState)
+  }
+
+  @Get('stateproduct/update/:id/:state')
+  updateStateProduct2(@Param('id') id: string,@Param("state") state:string ) {
     if(!states.includes(state)) throw new ForbiddenException('provide a valide state from [active,desactive]');
     return this.productService.updateStateProduct(+id, state);
   }
@@ -76,7 +81,7 @@ export class ProductController {
     return this.productService.update(+id, updateProductDto);
   }
 
-  @Get(':id')
+  @Get('delete/:id')
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);
   }

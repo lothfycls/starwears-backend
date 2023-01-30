@@ -29,17 +29,17 @@ export class BidController {
     return this.bidService.findHighBidOnProduct(+id);
   }
 
-  @Get(':id')
+  @Get('find/:id')
   findOne(@Param('id') id: string) {
     return this.bidService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Post('update/:id')
   update(@Param('id') id: string, @Body() updateBidDto: UpdateBidDto) {
     return this.bidService.update(+id, updateBidDto);
   }
 
-  @Delete(':id')
+  @Get('delete/:id')
   remove(@Param('id') id: string) {
     return this.bidService.remove(+id);
   }

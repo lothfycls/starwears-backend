@@ -8,10 +8,11 @@ export class BidService {
   constructor(private prisma:PrismaService){}
   async create(createBidDto: CreateBidDto) {
     // i need to check product state
-
+    const now=new Date();
     const bid= await this.prisma.bid.create({
       data:{
-        bid_date:new Date().toLocaleString(),
+        productId:createBidDto.product_id,
+        bid_date:now,
         bidAmount:createBidDto.amount,
         clientId:createBidDto.clien_id,
       },
@@ -27,6 +28,9 @@ export class BidService {
     const bids= await this.prisma.bid.findMany({
       where:{
         productId:id,
+      },
+      include:{
+        client:true,
       }
     })
     return bids;
@@ -65,6 +69,15 @@ export class BidService {
     const bid= await this.prisma.bid.findUnique({
       where:{
         id:id,
+      },
+      include:{
+        client:true,
+        product:{
+          include:{
+            productImages:true,
+            owner:true
+          }
+        }
       }
     })
     return bid;

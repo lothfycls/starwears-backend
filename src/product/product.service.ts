@@ -3,7 +3,7 @@ import { Certificate } from 'crypto';
 import { identity } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { UpdateProductDto, updateProductState } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -35,7 +35,9 @@ export class ProductService {
   }
 
   async findAll(){
-
+    const products= await this.prisma.product.findMany({
+    })
+    return products;
   }
 
   async findAllActive() {
@@ -174,22 +176,43 @@ export class ProductService {
     const dateNow= new Date();
     const products= await this.prisma.product.findMany({
       where:{
-        
-          AND:[
+          OR:[
             {
-              state:'COMMING'
+              AND:[
+                {
+                  state:'COMMING'
+                },
+                {
+                  auctionBegin:{
+                    gt: dateNow,
+                  }
+                },
+                {
+                  auctionEnd:{
+                    gt:dateNow,
+                  }
+                }
+              ]
             },
             {
-              auctionBegin:{
-                gt: dateNow,
-              }
-            },
-            {
-              auctionEnd:{
-                gt:dateNow,
-              }
+              AND:[
+                {
+                  state:'Active'
+                },
+                {
+                  auctionBegin:{
+                    gt: dateNow,
+                  }
+                },
+                {
+                  auctionEnd:{
+                    gt:dateNow,
+                  }
+                }
+              ]
             }
           ]
+          
           
          
       },
@@ -329,15 +352,35 @@ export class ProductService {
     return products;
   }
   
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const productUpdated= await this.prisma.product.update({
+      where:{
+        id:id,
+      },
+      data:updateProductDto,
+    })
+    return productUpdated;
   }
 
   updateStateProduct(id:number, state:string){
     
   }
 
+  async updateStateOfProduct(id:number, updateProductstateDtoe:updateProductState){
+    const updateState= await this.prisma.product.update({
+      where:{
+        id:id,
+      },
+      data:{
+        state:updateProductstateDtoe.state
+      }
+    })
+
+    return updateState;
+  }
+
   remove(id: number) {
+
     return `This action removes a #${id} product`;
   }
 }

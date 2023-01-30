@@ -17,7 +17,7 @@ export class CelebrityService {
     const newCelebrity= await this.prisma.celebrity.create({
       data:{
         name:createCelebrityDto.name,
-        description:createCelebrityDto.descritpion,
+        description:createCelebrityDto.description,
         urlPictures:{
           createMany:{
             data:url_Pictures,
@@ -82,7 +82,7 @@ export class CelebrityService {
         id:id,
       },
       data:{
-        description:updateCelebrityDto.descritpion,
+        description:updateCelebrityDto.description,
         name:updateCelebrityDto.name,
         urlPictures:{
           createMany:{

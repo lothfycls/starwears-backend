@@ -11,7 +11,7 @@ export class CreateCelebrityDto {
 
     @IsNotEmpty()
     @IsString()
-    descritpion:string;
+    description:string;
 
     @IsOptional()
     @IsString()
