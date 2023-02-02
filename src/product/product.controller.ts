@@ -11,7 +11,7 @@ const states:string[]= ["active","desactive"]
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
-
+  
   @Post("create")
   create(@Body() createProductDto: CreateProductDto) {
     return this.productService.create(createProductDto);

@@ -23,8 +23,13 @@ export class BidService {
         }
       }
     })
-    const maxAmount = product.bids[0].bidAmount;
-    if(maxAmount>=createBidDto.amount) throw new ForbiddenException("your bid is low than the highest bid on this product")
+    
+    if(!product.bids){
+      const maxAmount = product.bids[0].bidAmount;
+      if(maxAmount>=createBidDto.amount) throw new ForbiddenException("your bid is low than the highest bid on this product")
+    }
+    
+    
     const now=new Date();
     const bid= await this.prisma.bid.create({
       data:{

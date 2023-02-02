@@ -9,7 +9,7 @@ export class CreateBidDto {
 
     @IsNotEmpty()
     @IsNumber()
-    clien_id:number;
+    clien_id:number; //a regler
 
     @IsNotEmpty()
     @IsNumber()

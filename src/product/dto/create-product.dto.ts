@@ -21,7 +21,7 @@ export class CreateProductDto {
 
     categoryId:number;
 
-    ownerId:number;
+    ownerId:number; //delete it already exist celebrityId
 
 
     @IsString()
