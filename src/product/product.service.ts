@@ -16,6 +16,14 @@ export class ProductService {
     const newProduct= await this.prisma.product.create({
       data:{
         name:createProductDto.name,
+        brandId:createProductDto.brandId,
+        Interior_Color:createProductDto.Interior_Color,
+        categoryId:createProductDto.categoryId,
+        closure:createProductDto.closure,
+        Interior_Material:createProductDto.Interior_Material,
+        Material:createProductDto.Material,
+        Size:createProductDto.Size,
+        department:createProductDto.department,
         condition:createProductDto.condition,
         state:createProductDto.state,
         description:createProductDto.description,
