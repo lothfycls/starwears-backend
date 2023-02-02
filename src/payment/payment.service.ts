@@ -1,9 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import Stripe from 'stripe';
+import { PaymentRequestBody } from './entities/payment.entity';
 
 @Injectable()
 export class PaymentService {
+
+
+  private stripe;
+
+  constructor() {
+    this.stripe = new Stripe(process.env.API_SECRET_KEY, {
+      apiVersion: '2022-11-15',
+    });
+  }
+
+  createPayment(paymentRequestBody: PaymentRequestBody): Promise<any> {
+    let sumAmount = 0;
+    
+    sumAmount = sumAmount + paymentRequestBody.amount;
+    
+    return this.stripe.paymentIntents.create({
+      amount: sumAmount * 100,
+      currency: paymentRequestBody.currency,
+    });
+  }
   create(createPaymentDto: CreatePaymentDto) {
     return 'This action adds a new payment';
   }

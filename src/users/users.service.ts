@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateEmailDto, UpdatePasswordDto, UpdateProfileDto, UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +13,21 @@ export class UsersService {
   findAll() {
     return `This action returns all users`;
   }
-
+  async findAllPurchases(idClient:number){
+    const orders=await this.prisma.order.findMany({
+      where:{
+        ownerId:idClient,
+      },
+      include:{
+        product:{
+          include:{
+            productImages:true,
+          }
+        }
+      }
+    })
+    return orders;
+  }
   async findAllProductBids(idClient:number){
     const afterFiveDays= new Date();
     afterFiveDays.setHours(afterFiveDays.getDay() + 5);
@@ -63,8 +77,19 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: number, updateUserDto: UpdateProfileDto) {
+    
     return `This action updates a #${id} user`;
+  }
+  updatePassword(id:number, updatePassword:UpdatePasswordDto){
+
+  }
+  updateEmail(id:number,updateEmail:UpdateEmailDto){
+
+  }
+
+  updatePasswordUsingEmailSent(id:number, email:string){
+
   }
 
   remove(id: number) {
