@@ -24,7 +24,7 @@ export class BidService {
       }
     })
     
-    if(product.bids){
+    if(product.bids.length!=0){
       const maxAmount = product.bids[0].bidAmount;
       if(maxAmount>=createBidDto.amount) throw new ForbiddenException("your bid is low than the highest bid on this product")
     }
