@@ -24,8 +24,28 @@ export class UsersController {
   findAllProductBids(@Param('id') id: string){
     return this.usersService.findAllProductBids(+id);
   }
+  @Get("bids/failed/:id")
+  findAllProductBidsfailed(@Param('id') id: string){
+    return this.usersService.findAllProductBidsFailed(+id);
+  }
 
-  @Post("purchases/:id")
+  @Get("bids/wins/:id")
+  findAllProductBidsWins(@Param('id') id: string){
+    return this.usersService.findAllProductBidsWins(+id);
+
+  }
+
+  @Get("bids/active/:id")
+  findAllProductBidActive(@Param('id') id:string){
+    return this.usersService.findAllProductBidsActive(+id);
+  }
+
+  @Get("state/product/:idProduct/:idClient")
+  findRelation(@Param('idProduct') idProduct: string,@Param('idClient') idClient: string){
+    return this.usersService.findProductState(+idProduct,+idClient);
+  }
+
+  @Get("purchases/:id")
   findAllProductPurchased(@Param('id') id: string){
     return this.usersService.findAllPurchases(+id);
   }

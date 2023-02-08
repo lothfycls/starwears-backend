@@ -11,9 +11,14 @@ export class PaymentService {
   private stripe;
 
   constructor() {
-    this.stripe = new Stripe(process.env.API_SECRET_KEY, {
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: '2022-11-15',
     });
+  }
+
+  async  retrievePaymentIntent(clientSecret:string) {
+    const paymentIntent = await this.stripe.paymentIntents.retrieve(clientSecret);
+    return paymentIntent;
   }
 
   createPayment(paymentRequestBody: PaymentRequestBody): Promise<any> {
@@ -22,7 +27,7 @@ export class PaymentService {
     sumAmount = sumAmount + paymentRequestBody.amount;
     
     return this.stripe.paymentIntents.create({
-      amount: sumAmount * 100,
+      amount: sumAmount,
       currency: paymentRequestBody.currency,
     });
   }

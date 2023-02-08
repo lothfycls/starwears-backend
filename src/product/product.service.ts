@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common/exceptions';
 import { Certificate } from 'crypto';
 import { identity } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -44,6 +45,27 @@ export class ProductService {
 
   async findAll(){
     const products= await this.prisma.product.findMany({
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
+      }
     })
     return products;
   }
@@ -52,6 +74,27 @@ export class ProductService {
     const products= await this.prisma.product.findMany({
       where:{
         state:'Active'  
+      },
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
       }
     })
     return products;
@@ -61,6 +104,27 @@ export class ProductService {
     const products= await this.prisma.product.findMany({
       where:{
         state:'Sold'  
+      },
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
       }
     })
     return products;
@@ -70,6 +134,27 @@ export class ProductService {
     const products= await this.prisma.product.findMany({
       where:{
         categoryId:idCategory,
+      },
+      include:{
+        productImages:true,
+        bids:true,
+        _count:true,
+        brand:{
+          select:{
+            name:true,
+          }
+        },
+        owner:{
+          select:{
+            name:true,
+          }
+        },
+        LastBidder:{
+          select:{
+            id:true,
+          }
+        }
+        
       }
     })
     return products;
@@ -333,11 +418,16 @@ export class ProductService {
   }
 
   async findOne(id: number) {
-    const products= await this.prisma.product.findUnique({
+    const product= await this.prisma.product.findUnique({
       where:{id:id},
       include:{
         productImages:true,
-        bids:true,
+        bids:{
+          orderBy:{
+            bidAmount:"desc",
+          },
+          take:1,
+        },
         _count:true,
         brand:{
           select:{
@@ -350,14 +440,46 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+
           }
         }
         
       }
     })
-    return products;
+    if(!product) throw new ForbiddenException("no product exist with this id");
+    const dateNow= new Date();
+    if(product.auctionEnd<dateNow && product.state=="Active" && product.bids){
+      const productUpdated=await this.prisma.product.update({
+        where:{
+          id:id,
+        },
+        data:{
+          state:'OUT',
+          bids:{
+            update:{
+              where:{
+                id:product.bids[0].id,
+              },
+              data:{
+                state:"WINNED",
+              }
+            }
+          }
+        },
+        include:{
+          bids:{
+            orderBy:{
+              bidAmount:"desc",
+            },
+            take:1
+          },
+  
+        }
+      })
+      
+    }
+    return product;
   }
   
   async update(id: number, updateProductDto: UpdateProductDto) {

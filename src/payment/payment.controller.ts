@@ -13,12 +13,11 @@ import { Response } from 'express';
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  @Post("create")
+  @Post("createintent")
   createPayments(
     @Res() response: Response,
     @Body() paymentRequestBody: PaymentRequestBody,
-  ) {
-    this.paymentService
+  ) {const paymentIntent = this.paymentService
       .createPayment(paymentRequestBody)
       .then((res) => {
         response.status(HttpStatus.CREATED).json(res);
@@ -26,6 +25,22 @@ export class PaymentController {
       .catch((err) => {
         response.status(HttpStatus.BAD_REQUEST).json(err);
       });
+      return { clientSecret: paymentIntent };
+  }
+  @Get("get-status")
+  async getPaymentIntentStatus(@Body() clientSecret:string) {
+    const paymentIntent = await this.paymentService.retrievePaymentIntent(clientSecret);
+    return { status: paymentIntent.status };
+  }
+
+  @Post('update-order-status')
+  async updateOrderStatus(@Body() body) {
+    const { orderId, paymentIntentStatus } = body;
+
+    // Update the status of the order based on the payment intent status
+    // ...
+
+    return { message: 'Order status updated' };
   }
 
 
