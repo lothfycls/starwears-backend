@@ -37,12 +37,29 @@ export class BidService {
         bid_date:now,
         bidAmount:createBidDto.amount,
         clientId:createBidDto.clien_id,
+        
       },
       include:{
         client:true,
         product:true,
       }
     })
+    await this.prisma.product.update({
+      where:{
+       id:createBidDto.product_id, 
+      },
+      data:{
+        lastPrice:createBidDto.amount,
+        LastBidder:{
+          disconnect:true,
+          connect:{
+            id:createBidDto.clien_id, //update that 
+          }
+        }
+      }
+    })
+    //last bidder
+    
     return bid;
   }
 

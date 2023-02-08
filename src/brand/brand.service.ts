@@ -30,6 +30,12 @@ export class BrandService {
       },
       include:{
         productImages:true,
+        owner:true,
+        _count:{
+          select:{
+            bids:true,
+          }
+        }
       }
     })
     return allProduct;

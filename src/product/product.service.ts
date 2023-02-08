@@ -439,12 +439,7 @@ export class ProductService {
             name:true,
           }
         },
-        LastBidder:{
-          include:{
-
-          }
-        }
-        
+        LastBidder:true,
       }
     })
     if(!product) throw new ForbiddenException("no product exist with this id");

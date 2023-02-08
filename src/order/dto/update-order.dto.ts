@@ -5,5 +5,7 @@ export class UpdateOrderDto extends PartialType(CreateOrderDto) {}
 
 
 export class UpdateTrackingNumber {
-    orderNumber:number;
+    state:string;
+
+
 }

@@ -1,12 +1,16 @@
 import { PaymentWay } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateOrderDto {
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
     productId:number;
+
+    @IsNumber()
+    @IsNotEmpty()
+    client_id:number;
 
     @IsString()
     @IsNotEmpty()

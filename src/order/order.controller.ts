@@ -37,7 +37,7 @@ export class OrderController {
 
 
 
-  @Post('update/:id')
+  @Post('update/state/:id')
   update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.orderService.update(+id, updateOrderDto);
   }

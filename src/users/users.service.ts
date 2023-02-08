@@ -32,14 +32,14 @@ export class UsersService {
     })
     return orders;
   }
-  async findProductState(idClient:number,idProduct:number){
+  async findProductState(idProduct:number,idClient:number){
     const highestBid= await this.prisma.bid.findFirst({
       where:{
         productId:idProduct,
       },
       orderBy:{
         bidAmount:"desc",
-        bid_date:"desc",
+      
       },
       take:1
     })
@@ -51,7 +51,7 @@ export class UsersService {
       },
       orderBy:{
         bidAmount:"desc",
-        bid_date:"desc",
+        
       },
       take:1,
     })
@@ -66,17 +66,18 @@ export class UsersService {
     })
     let state:string;
     let bid=highestBid;
+    if(product)
     if(product.state=="Active"){
       if(!clientBid){
         state="never"
-      }else if(clientBid.clientId=highestBid.clientId){
+      }else if(clientBid.clientId==highestBid.clientId){
         state="already"
       }else{
         state="outbided"
         ;
       }
     }else if(product.state=="OUT"){
-      if(clientBid.clientId=highestBid.clientId){
+      if(clientBid.clientId==highestBid.clientId){
         state="won"
       }else{
         state="closed"

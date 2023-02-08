@@ -33,6 +33,20 @@ export class CelebrityService {
     const allCelebrity= await this.prisma.celebrity.findMany({
       include:{
         urlPictures:true,
+        _count:{
+          select:{
+            products:true,
+            urlPictures:true,
+          }
+        },
+        products:{
+          where:{
+            state:"Active",
+          },
+          select:{
+            id:true,
+          }
+        }
       }
     })
     return allCelebrity;
