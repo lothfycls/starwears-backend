@@ -10,6 +10,15 @@ import { UpdateProductDto, updateProductState } from './dto/update-product.dto';
 export class ProductService {
   constructor(private prisma: PrismaService) {}
   async create(createProductDto: CreateProductDto) {
+
+    const verify= Promise.all([
+      await this.prisma.brand.findUnique({
+        where:{
+          
+        }
+      })
+    ]) 
+
     let productImages=[];
     createProductDto.productImage.forEach((image)=>{
       productImages.push({url:image})
@@ -444,7 +453,8 @@ export class ProductService {
     })
     if(!product) throw new ForbiddenException("no product exist with this id");
     const dateNow= new Date();
-    if(product.auctionEnd<dateNow && product.state=="Active" && product.bids){
+    if(product.auctionEnd<dateNow && product.state=="Active" && product.bids.length){
+      console.log(product.bids)
       const productUpdated=await this.prisma.product.update({
         where:{
           id:id,

@@ -31,6 +31,32 @@ export class BidService {
     
     
     const now=new Date();
+    
+    await this.prisma.product.update({
+      where:{
+       id:createBidDto.product_id, 
+      },
+      data:{
+        
+        LastBidder:{
+          disconnect:true,
+        }
+      }
+    })
+
+    await this.prisma.product.update({
+      where:{
+        id:createBidDto.product_id, 
+       },
+       data:{
+         lastPrice:createBidDto.amount,
+         LastBidder:{
+           connect:{
+            id:createBidDto.clien_id
+           },
+         }
+       }
+    })
     const bid= await this.prisma.bid.create({
       data:{
         productId:createBidDto.product_id,
@@ -42,20 +68,6 @@ export class BidService {
       include:{
         client:true,
         product:true,
-      }
-    })
-    await this.prisma.product.update({
-      where:{
-       id:createBidDto.product_id, 
-      },
-      data:{
-        lastPrice:createBidDto.amount,
-        LastBidder:{
-          disconnect:true,
-          connect:{
-            id:createBidDto.clien_id, //update that 
-          }
-        }
       }
     })
     //last bidder
