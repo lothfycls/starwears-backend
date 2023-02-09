@@ -12,12 +12,26 @@ export class OrderService {
       where:{
         productId:createOrderDto.productId,
       }
+      
     })
     if(orderExist){
       const orderNumber=orderExist.id
       throw new ForbiddenException(`this product is already related to an Order with the Id: ${orderNumber}`)
     } 
 
+    const product= await this.prisma.product.findUnique({
+      where:{
+        id:createOrderDto.productId,
+      }
+    })
+
+    if(!product){
+      throw new ForbiddenException("no product exist with this id")
+    }else{
+      if(product.auctionEnd> new Date()) {
+        throw new ForbiddenException("this product still avalaible for auctions,or disabled")
+      }
+    }
     const newOrder= await this.prisma.order.create({
       data:{
         total:createOrderDto.total,

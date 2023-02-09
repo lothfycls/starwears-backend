@@ -11,13 +11,46 @@ export class ProductService {
   constructor(private prisma: PrismaService) {}
   async create(createProductDto: CreateProductDto) {
 
-    const verify= Promise.all([
+    const verify=await Promise.all([
       await this.prisma.brand.findUnique({
         where:{
-          
+          id:createProductDto.brandId,
+        },
+        select:{
+          id:true,
+        }
+      }),
+      await this.prisma.celebrity.findUnique({
+        where:{
+          id:createProductDto.celebrityId,
+        },
+        select:{
+          id:true,
+        }
+      }),
+      await this.prisma.category.findUnique({
+        where:{
+          id:createProductDto.categoryId,
+        },
+        select:{
+          id:true,
         }
       })
+
+        
     ]) 
+    console.log(verify)
+
+    if(!verify[0]){
+      throw new ForbiddenException("this brand id dosn't exist")
+    }
+    if(!verify[1]){
+      throw new ForbiddenException("this celebrity id dosn't exist")
+    }
+    if(!verify[2]){
+      throw new ForbiddenException("this category id dosn't exist")
+    }
+    
 
     let productImages=[];
     createProductDto.productImage.forEach((image)=>{

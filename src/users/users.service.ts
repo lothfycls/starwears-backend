@@ -232,7 +232,6 @@ export class UsersService {
             },
             {
               state:"Sold",
-              
             }
           ]
         }]
@@ -271,11 +270,10 @@ export class UsersService {
     afterFiveDays.setHours(afterFiveDays.getDay() + 5);
     const products= await this.prisma.product.findMany({
       where:{
-        AND:[{bids:{
-          every:{
-          clientId:idClient,
-          state:"ACTIVE",
-          },
+        AND:[{LastBidder:{
+          NOT:{
+            id:idClient,
+          }
         }},{
           OR:[
             {
@@ -283,9 +281,6 @@ export class UsersService {
             },
             {
               state:"Sold",
-              auctionEnd:{
-                lt:afterFiveDays,
-              }
             }
           ]
         }]
@@ -313,8 +308,15 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateProfileDto) {
-    
+ async update(id: number, updateUserDto: UpdateProfileDto) {
+    const profileUpdate= await this.prisma.client.update({
+      where:{
+        id:id,
+      },
+      data:{
+
+      }
+    })
     return `This action updates a #${id} user`;
   }
   updatePassword(id:number, updatePassword:UpdatePasswordDto){
