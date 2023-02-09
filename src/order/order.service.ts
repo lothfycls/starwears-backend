@@ -56,6 +56,10 @@ export class OrderService {
             id:createOrderDto.productId,
           }
         }
+      },
+      include:{
+        product:true,
+        owner:true,
       }
     })
 
