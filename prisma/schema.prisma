@@ -220,6 +220,7 @@ enum OrderState {
   PENDING
   PAID
   DELIVERD
+  FAILED
 }
 
 enum PaymentWay {

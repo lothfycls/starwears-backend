@@ -7,7 +7,7 @@ import { CreateOrderDto } from './create-order.dto';
 
 export class UpdateOrderStatusDto  {
     @IsString()
-    @IsIn(["PAID","DELIVERED","PENDING","CANCELLED"])
+    @IsIn(["PAID","DELIVERED","PENDING","CANCELLED","FAILED"])
     @IsNotEmpty()
     order_status:OrderState;
 }
@@ -19,7 +19,7 @@ export class UpdateTrackingNumberDto {
     orderNumber:number;
     
     @IsString()
-    @IsIn(["PAID","DELIVERED","PENDING","CANCELLED"])
+    @IsIn(["PAID","DELIVERED","PENDING","CANCELLED","FAILED"])
     @IsNotEmpty()
     order_status:OrderState;
 }
@@ -27,7 +27,7 @@ export class UpdateTrackingNumberDto {
 
 
 export class UpdateOrderNumberDto {
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
     orderNumber:number;
 }

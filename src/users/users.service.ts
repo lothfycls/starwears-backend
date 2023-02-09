@@ -158,7 +158,19 @@ export class UsersService {
   }
 
   async findAllProductBidsActive(idClient:number){
+
+    
     const afterFiveDays= new Date();
+    await this.prisma.product.updateMany({
+      where:{
+        auctionEnd:{
+          lt:afterFiveDays,
+        }
+      },
+      data:{
+        state:"OUT",
+      }
+    })
     afterFiveDays.setHours(afterFiveDays.getDay() + 5);
     const products= await this.prisma.product.findMany({
       where:{
@@ -195,6 +207,16 @@ export class UsersService {
 
   async findAllProductBidsWins(idClient:number){
     const afterFiveDays= new Date();
+    await this.prisma.product.updateMany({
+      where:{
+        auctionEnd:{
+          lt:afterFiveDays,
+        }
+      },
+      data:{
+        state:"OUT",
+      }
+    })
     afterFiveDays.setHours(afterFiveDays.getDay() + 5);
     const products= await this.prisma.product.findMany({
       where:{
@@ -210,9 +232,7 @@ export class UsersService {
             },
             {
               state:"Sold",
-              auctionEnd:{
-                lt:afterFiveDays,
-              }
+              
             }
           ]
         }]
@@ -238,6 +258,16 @@ export class UsersService {
 
   async findAllProductBidsFailed(idClient:number){
     const afterFiveDays= new Date();
+    await this.prisma.product.updateMany({
+      where:{
+        auctionEnd:{
+          lt:afterFiveDays,
+        }
+      },
+      data:{
+        state:"OUT",
+      }
+    })
     afterFiveDays.setHours(afterFiveDays.getDay() + 5);
     const products= await this.prisma.product.findMany({
       where:{

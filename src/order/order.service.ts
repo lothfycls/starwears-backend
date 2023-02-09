@@ -1,13 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderStatusDto } from './dto/update-order.dto';
+import { UpdateOrderNumberDto, UpdateOrderStatusDto, UpdateTrackingNumberDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrderService {
   constructor(private prisma: PrismaService) {}
   
   async create(createOrderDto: CreateOrderDto) {
+    const orderExist= await this.prisma.order.findFirst({
+      where:{
+        productId:createOrderDto.productId,
+      }
+    })
+    if(orderExist){
+      const orderNumber=orderExist.id
+      throw new ForbiddenException(`this product is already related to an Order with the Id: ${orderNumber}`)
+    } 
+
     const newOrder= await this.prisma.order.create({
       data:{
         total:createOrderDto.total,
@@ -30,8 +40,33 @@ export class OrderService {
         }
       }
     })
+
+    await this.prisma.product.update({
+      where:{
+        id:createOrderDto.productId,
+      },
+      data:{
+        state:"Sold",
+      }
+    })
     
     return newOrder;
+  }
+
+  async updateTrackinNumber(orderId:number,trackingNumber: UpdateOrderNumberDto){
+    const orderUpdate= await this.prisma.order.update({
+      where:{
+        id:orderId,
+      },
+      data:{
+        orderNumber:trackingNumber.orderNumber.toString()
+      }
+    })
+    return orderUpdate;
+  }
+
+  async getOrderDeliveryInfo(numberTrack:string){
+
   }
 
   async findAll() {
@@ -45,6 +80,7 @@ export class OrderService {
     return allOrders;
   }
 
+
   async findOne(id: number) {
     const orders= await this.prisma.order.findMany({
       where:{
@@ -56,7 +92,7 @@ export class OrderService {
         product:true,
       }
     })
-    return `This action returns a #${id} order`;
+    return orders;
   }
 
   async update(id: number, updateOrderDto: UpdateOrderStatusDto) {
@@ -71,7 +107,12 @@ export class OrderService {
     return updatedOrder;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async remove(id: number) {
+    const removeOrder= await this.prisma.order.delete({
+      where:{
+       id:id,
+      }
+    })
+    return removeOrder;
   }
 }

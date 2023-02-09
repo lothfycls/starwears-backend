@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderStatusDto } from './dto/update-order.dto';
+import { UpdateOrderNumberDto, UpdateOrderStatusDto } from './dto/update-order.dto';
 import { Public } from 'src/common/decorators';
 
 
@@ -30,11 +30,18 @@ export class OrderController {
     return this.orderService.findOne(+id);
   }
 
-  @Post('find/:id')
-  updateorderNumber(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
+  @Get('find/orderNumber/:trackNumber')
+  getStateOrder(@Param('trackNumber') trackingNumber: string) {
+    return this.orderService.getOrderDeliveryInfo(trackingNumber);
   }
 
+  
+
+
+  @Post("tracking/state/:orderId")
+  updateorderNumber(@Param('id') id :string,@Body() orderNumberDto:UpdateOrderNumberDto){
+    return this.orderService.updateTrackinNumber(+id,orderNumberDto);
+  }
 
 
   @Post('update/state/:id')

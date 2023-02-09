@@ -54,7 +54,7 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
-
+  
   @Post('profile/update/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateProfileDto) {
     return this.usersService.update(+id, updateUserDto);
