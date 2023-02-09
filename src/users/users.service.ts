@@ -163,11 +163,9 @@ export class UsersService {
     const afterFiveDays= new Date();
     await this.prisma.product.updateMany({
       where:{
-        AND:[{auctionEnd:{
+        auctionEnd:{
           lt:afterFiveDays,
-        }},{
-          state:'Active'
-        }]
+        }
       },
       data:{
         state:"OUT",
@@ -225,12 +223,9 @@ export class UsersService {
     afterFiveDays.setHours(afterFiveDays.getDay() + 5);
     const products= await this.prisma.product.findMany({
       where:{
-        AND:[{bids:{
-          some:{
-          clientId:idClient,
-          state:"WINNED"
-          },
-        }},{
+        AND:[{
+          lastBidId:idClient,
+        },{
           OR:[
             {
               state:"OUT",

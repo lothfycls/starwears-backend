@@ -33,6 +33,7 @@ model Client {
   id               Int       @id @default(autoincrement())
   first_name       String?
   last_name        String?
+  username         String?   @unique // update uername for lastbid
   twoFactorAuth    Boolean   @default(false)
   phone_number     String?   @unique
   email            String?   @unique
