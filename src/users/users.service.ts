@@ -226,6 +226,7 @@ export class UsersService {
       where:{
         AND:[{
           lastBidId:idClient,
+          state:"OUT",
         },{
           OR:[
             {
@@ -260,7 +261,6 @@ export class UsersService {
       where:{
         auctionEnd:{
           lt:afterFiveDays,
-          
         },
         state:"Active",
       },
@@ -274,8 +274,14 @@ export class UsersService {
         AND:[{LastBidder:{
           NOT:{
             id:idClient,
-          }
+          },
         }},{
+          bids:{
+            some:{
+              clientId:idClient,
+            }
+          }
+        },{
           OR:[
             {
               state:"OUT",
