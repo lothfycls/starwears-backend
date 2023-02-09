@@ -31,7 +31,11 @@ export class OrderService {
       if(product.auctionEnd> new Date()) {
         throw new ForbiddenException("this product still avalaible for auctions,or disabled")
       }
+      if(product.lastBidId!=createOrderDto.ownerId){
+        throw new ForbiddenException("this order can't be placed by you, it is owned by another person")
+      }
     }
+    
     const newOrder= await this.prisma.order.create({
       data:{
         total:createOrderDto.total,
@@ -158,6 +162,8 @@ export class OrderService {
   }
 
   async remove(id: number) {
+
+    
     const removeOrder= await this.prisma.order.delete({
       where:{
        id:id,

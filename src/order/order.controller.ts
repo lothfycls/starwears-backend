@@ -59,7 +59,7 @@ export class OrderController {
     return this.orderService.update(+id, updateOrderDto);
   }
 
-  @Delete(':id')
+  @Get('delete/:id')
   remove(@Param('id') id: string) {
     return this.orderService.remove(+id);
   }
