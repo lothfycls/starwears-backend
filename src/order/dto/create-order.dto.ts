@@ -1,6 +1,6 @@
 import { PaymentWay } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateOrderDto {
 
@@ -10,7 +10,11 @@ export class CreateOrderDto {
 
     @IsNumber()
     @IsNotEmpty()
-    client_id:number;
+    ownerId:number;
+
+    @IsOptional()
+    @IsString()
+    orderNumber:string;
 
     @IsString()
     @IsNotEmpty()
@@ -30,19 +34,19 @@ export class CreateOrderDto {
     @IsNotEmpty()
     client_comment:string;
 
-
+    @IsIn(["CARD","PAYPAL"])
     @IsString()
     @IsNotEmpty()
     payment_way:PaymentWay;
 
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
-    shipping_cost:String;
+    shipping_cost:number;
 
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
-    total:String;
+    total:number;
 
 }
