@@ -188,6 +188,7 @@ export class UsersService {
         
       },
       include:{
+        _count:true,
         bids:{
           orderBy:{
             bidAmount:"desc"
@@ -235,6 +236,7 @@ export class UsersService {
         
       },
       include:{
+        _count:true,
         bids:{
           orderBy:{
             bidAmount:"desc"
@@ -286,6 +288,7 @@ export class UsersService {
         
       },
       include:{
+        _count:true,
         bids:{
           orderBy:{
             bidAmount:"desc"
