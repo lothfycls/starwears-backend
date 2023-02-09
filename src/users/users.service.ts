@@ -229,9 +229,6 @@ export class UsersService {
           OR:[
             {
               state:"OUT",
-            },
-            {
-              state:"Sold",
             }
           ]
         }]
@@ -261,7 +258,9 @@ export class UsersService {
       where:{
         auctionEnd:{
           lt:afterFiveDays,
-        }
+          
+        },
+        state:"Active",
       },
       data:{
         state:"OUT",

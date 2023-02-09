@@ -94,7 +94,7 @@ model OrderItems {
 model Celebrity {
   id          Int               @id @default(autoincrement())
   name        String
-  description String?
+  description String?           @db.LongText
   profession  String?
   email       String?
   phoneNumber String?
@@ -174,7 +174,7 @@ model ProductImage {
 
 model Category {
   id          Int       @id @default(autoincrement())
-  name        String
+  name        String    @unique
   description String?   @db.VarChar(2000)
   image_url   String?
   createdAt   DateTime  @default(now())
@@ -243,7 +243,7 @@ enum BidState {
 
 model Brand {
   id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(1000)
+  name      String    @unique @db.VarChar(1000)
   image     String?   @db.VarChar(1000)
   products  Product[]
   createdAt DateTime  @default(now())
