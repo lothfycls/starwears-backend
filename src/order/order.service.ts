@@ -59,7 +59,7 @@ export class OrderService {
       }
     })
 
-    await this.prisma.product.update({
+    const productdjdj=await this.prisma.product.update({
       where:{
         id:createOrderDto.productId,
       },
