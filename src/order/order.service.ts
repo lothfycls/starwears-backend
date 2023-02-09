@@ -109,6 +109,42 @@ export class OrderService {
     return orders;
   }
 
+  async findFailed(id: number) {
+    const orders= await this.prisma.order.findMany({
+      where:{
+        AND:[{
+          ownerId:id,
+        },{
+          order_status:"PENDING"
+        }]
+        
+      },
+      include:{
+        _count:true,
+        owner:true,
+        product:true,
+      }
+    })
+    return orders;
+  }
+
+  async findSuccess(id: number) {
+    const orders= await this.prisma.order.findMany({
+      where:{
+        AND:[{
+          ownerId:id,
+        },{
+          order_status:"PAID"
+        }]
+      },
+      include:{
+        _count:true,
+        owner:true,
+        product:true,
+      }
+    })
+    return orders;
+  }
   async update(id: number, updateOrderDto: UpdateOrderStatusDto) {
     const updatedOrder= await this.prisma.order.update({
       where:{
