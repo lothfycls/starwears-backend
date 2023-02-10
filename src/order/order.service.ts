@@ -132,8 +132,13 @@ export class OrderService {
         owner:true,
         product:{
           include:{
+            
             _count:true,
             productImages:true,
+            LastBidder:true,
+            bids:true,
+            owner:true,
+            clientWin:true,
           }
         },
       }
