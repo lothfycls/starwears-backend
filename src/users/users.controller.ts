@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateEmailDto, UpdatePasswordDto, UpdateProfileDto, UpdateUserDto } from './dto/update-user.dto';
+import { UpdateEmailDto, updatePasswordDashDto, UpdatePasswordDto, UpdateProfileDto, UpdateUserDto, UpdateUserNameDto } from './dto/update-user.dto';
 import { Public } from 'src/common/decorators';
 
 
@@ -67,12 +67,22 @@ export class UsersController {
     return this.usersService.updatePassword(+id, updateUserDto);
   }
 
-  @Post('password/update/:id')
+  @Post('password/updateDash/:id')
+  updatePasswordDash(@Param('id') id: string, @Body() updateUserDto: updatePasswordDashDto) {
+    return this.usersService.updatePasswordDash(+id, updateUserDto);
+  }
+
+  @Post('email/update/:id')
   updateEmail(@Param('id') id: string, @Body() updateUserDto: UpdateEmailDto) {
     return this.usersService.updateEmail(+id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Post('username/update/:id')
+  updateUserName(@Param('id') id: string, @Body() updateUserDto: UpdateUserNameDto) {
+    return this.usersService.updateUserName(+id, updateUserDto);
+  }
+
+  @Get('delete/:id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }

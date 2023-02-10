@@ -35,6 +35,10 @@ export class OrderController {
     return this.orderService.findFailed(+id);
   }
 
+  @Get("orderState/:trackingNumber")
+  findStateOfTrackingNumber(@Param("trackingNumber") id:string){
+    return "PENDING";
+  }
   @Get('purchases/success/:userId')
   findAllPurchasesSuccess(@Param('userId') id: string) {
     return this.orderService.findSuccess(+id);

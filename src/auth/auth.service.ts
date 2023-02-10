@@ -96,12 +96,26 @@ export class AuthService {
         },
       })) ;
 
-    if (ExistCustomer)
-      throw new ForbiddenException('email or phone num already exist');
+    if (ExistCustomer) throw new ForbiddenException('email or phone num already exist');
+    
+
+    let newUsername= dto.email.split("@")[0];
+      const checkOthers= await this.prisma.client.findMany({
+        where:{
+          username:{
+            contains:newUsername
+          },
+        }
+      })
+
+      newUsername= newUsername+(checkOthers?checkOthers.length:"").toString()
+
+      
     const newCustomer = await this.prisma.client.create({
       data: {
         email: dto.email,
         password: hash,
+        username:newUsername,
       },
     });
 
@@ -127,14 +141,35 @@ export class AuthService {
     });
 
     if (!client) throw new ForbiddenException('user not found');
+    if(!client.username){
+      let newUsername= client.email.split("@")[0];
+      const checkOthers= await this.prisma.client.findMany({
+        where:{
+          username:{
+            contains:newUsername
+          },
+        }
+      })
 
+      newUsername= newUsername+(checkOthers?checkOthers.length:"").toString()
+
+      await this.prisma.client.update({
+        where:{
+          id:client.id,
+        },
+        data:{
+          username: newUsername
+        }
+      })
+    }
     const passwordMatches = await bcrypt.compare(
       dto.password,
       client.password,
     );
 
     if (!passwordMatches) throw new ForbiddenException("password dosn't match");
-
+    
+    
     const tokens = await this.getTokenAt(
       client.id,
       client.email,
