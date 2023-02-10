@@ -130,7 +130,12 @@ export class OrderService {
       include:{
         _count:true,
         owner:true,
-        product:true,
+        product:{
+          include:{
+            _count:true,
+            productImages:true,
+          }
+        },
       }
     })
     return orders;
@@ -148,7 +153,16 @@ export class OrderService {
       include:{
         _count:true,
         owner:true,
-        product:true,
+        product:{
+          include:{
+            _count:true,
+            productImages:true,
+            LastBidder:true,
+            bids:true,
+            owner:true,
+            clientWin:true,
+          }
+        },
       }
     })
     return orders;
