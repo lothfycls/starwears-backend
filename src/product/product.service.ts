@@ -18,6 +18,7 @@ export class ProductService {
         },
         select:{
           id:true,
+
         }
       }),
       await this.prisma.celebrity.findUnique({
@@ -102,8 +103,8 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+            _count:true,
           }
         }
         
@@ -132,8 +133,8 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+            _count:true,
           }
         }
         
@@ -162,8 +163,8 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+            _count:true,
           }
         }
         
@@ -192,8 +193,8 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+            _count:true,
           }
         }
         
@@ -222,8 +223,8 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+            _count:true,
           }
         }
         
@@ -292,8 +293,8 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+            _count:true,
           }
         }
         
@@ -366,8 +367,8 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+            _count:true,
           }
         }
         
@@ -448,8 +449,8 @@ export class ProductService {
           }
         },
         LastBidder:{
-          select:{
-            id:true,
+          include:{
+            _count:true,
           }
         }
         
