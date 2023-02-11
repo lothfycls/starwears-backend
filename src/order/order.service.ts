@@ -111,7 +111,19 @@ export class OrderService {
       include:{
         _count:true,
         owner:true,
-        product:true,
+        product:{
+          include:{
+            _count:true,
+            productImages:true,
+            bids:{
+              orderBy:{
+                bidAmount:"desc"
+              },
+
+            },
+
+          }
+        },
       }
     })
     return orders;
