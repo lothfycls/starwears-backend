@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Notifications {
+  id        Int      @id @default(autoincrement())
+  message   String
+  userId    Int?
+  client    Client?  @relation(references: [id], fields: [userId])
+  createdAt DateTime @default(now())
+}
+
 model Admin {
   id          Int      @id @default(autoincrement())
   email       String   @unique
@@ -30,24 +38,25 @@ model Banner {
 }
 
 model Client {
-  id               Int       @id @default(autoincrement())
+  id               Int             @id @default(autoincrement())
   first_name       String?
   last_name        String? // update uername for lastbid
   username         String?
-  twoFactorAuth    Boolean   @default(false)
-  phone_number     String?   @unique
-  email            String?   @unique
+  twoFactorAuth    Boolean         @default(false)
+  phone_number     String?         @unique
+  email            String?         @unique
   password         String?
-  method_auth      Auth_Type @default(EMAIL)
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  last_seen        DateTime  @default(now())
-  gender           Gender    @default(Male)
+  method_auth      Auth_Type       @default(EMAIL)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  last_seen        DateTime        @default(now())
+  gender           Gender          @default(Male)
   address          String?
   orders           Order[]
   PurchasedProduct Product[]
   bids             Bid[]
-  highestBid       Product[] @relation(name: "LastBids")
+  highestBid       Product[]       @relation(name: "LastBids")
+  notifications    Notifications[]
 }
 
 model Otp_code {
