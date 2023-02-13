@@ -26,6 +26,11 @@ export class NotificationsService {
       message:"notifications test",
       userId:42,
       createdAt:Date(),
+    },{
+      id:1,
+      message:"notifications test 2",
+      userId:42,
+      createdAt:Date(),
     }];
   }
 
