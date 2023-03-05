@@ -20,7 +20,8 @@ export class BidService {
             
           },
           take: 1,
-        }
+        },
+        name:true,
       }
     })
     
@@ -70,7 +71,45 @@ export class BidService {
         product:true,
       }
     })
+
+    
     //last bidder
+
+
+    //sending Notifications to the user
+    const productsUpdatedIds=await this.prisma.bid.findMany({
+      where:{
+      AND:[{productId:createBidDto.product_id,},{
+        NOT:{
+        clientId:createBidDto.clien_id,
+      }
+      }],
+      },
+      distinct:["clientId"],
+      select:{
+        id:true,
+        clientId:true,
+      }
+      });
+  
+      let NotificationsList=[];
+      for (let i = 0; i < productsUpdatedIds.length; i++) {
+         NotificationsList.push({
+          message:"Hi, unfortunately someone has placed a higher bid on "+ product.name+". If you want to stay in the game, you can place another bid by visiting the auction page.",
+          userId:productsUpdatedIds[i].clientId,
+         })
+      }
+
+      await this.prisma.notifications.createMany({
+        data:NotificationsList,
+      })
+
+      await this.prisma.notifications.create({
+        data:{
+          userId:createBidDto.clien_id,
+          message:"Congratulations! You're currently the highest bidder on "+ product.name+" Keep an eye on the auction screen, in case someone outbids you. Good luck!"
+        }
+      })
     
     return bid;
   }

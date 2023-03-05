@@ -14,7 +14,7 @@ export class CreateProductDto {
     description:string;
 
     @IsOptional()
-    @IsIn(["Active",""])
+    @IsIn(["Active","COMMING"])
     state:ProductState;
 
 

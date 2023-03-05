@@ -62,7 +62,12 @@ export class OrderService {
         owner:true,
       }
     })
+    
 
+    
+
+
+    
     const productdjdj=await this.prisma.product.update({
       where:{
         id:createOrderDto.productId,
@@ -71,7 +76,12 @@ export class OrderService {
         state:"Sold",
       }
     })
-    
+    await this.prisma.notifications.create({
+      data:{
+        message:" Hi , we're thrilled to let you know that your purchase of "+ productdjdj.name+" is now complete. Your payment has been processed, and your product will be shipped to you soon. Thank you for using our auction application, and we hope you enjoy your purchase!",
+        userId:createOrderDto.ownerId,
+      }
+    })
     return newOrder;
   }
 
