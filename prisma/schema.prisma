@@ -9,7 +9,7 @@ datasource db {
 
 model Notifications {
   id        Int      @id @default(autoincrement())
-  message   String
+  message   String   @db.LongText
   userId    Int?
   client    Client?  @relation(references: [id], fields: [userId])
   createdAt DateTime @default(now())
