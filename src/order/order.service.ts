@@ -104,9 +104,10 @@ export class OrderService {
 
 
   async findOne(id: number) {
-    const orders= await this.prisma.order.findMany({
+    try{
+      const orders= await this.prisma.order.findUnique({
       where:{
-        ownerId:id,
+        id:id,
       },
       include:{
         _count:true,
@@ -127,6 +128,11 @@ export class OrderService {
       }
     })
     return orders;
+    }catch(err){
+      console.log(err)
+      return "this Order Id Dosn't Exist"
+    }
+    
   }
 
   async findFailed(id: number) {
