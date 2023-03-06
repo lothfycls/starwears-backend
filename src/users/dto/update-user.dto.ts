@@ -13,7 +13,7 @@ export class UpdateProfileDto
 
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     last_name:string;
 
     @IsString()
@@ -22,7 +22,7 @@ export class UpdateProfileDto
 
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     address:string;
 
 }
