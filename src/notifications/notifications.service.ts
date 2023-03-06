@@ -21,17 +21,7 @@ export class NotificationsService {
         userId:id,
       }
     })
-    return [{
-      id:1,
-      message:"notifications test",
-      userId:42,
-      createdAt:Date(),
-    },{
-      id:1,
-      message:"notifications test 2",
-      userId:42,
-      createdAt:Date(),
-    }];
+    return notification;
   }
 
   update(id: number, updateNotificationDto: UpdateNotificationDto) {
