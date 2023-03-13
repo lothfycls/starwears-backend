@@ -67,6 +67,7 @@ export class ProductService {
         Interior_Material:createProductDto.Interior_Material,
         Material:createProductDto.Material,
         Size:createProductDto.Size,
+        lastPrice:createProductDto.lastPrice,
         department:createProductDto.department,
         condition:createProductDto.condition,
         state:createProductDto.state,
