@@ -47,6 +47,9 @@ export class CelebrityService {
             id:true,
           }
         }
+      },
+      orderBy:{
+        name:"asc"
       }
     })
     return allCelebrity;
