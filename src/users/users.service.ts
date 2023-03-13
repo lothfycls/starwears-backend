@@ -182,13 +182,11 @@ export class UsersService {
           some:{
           clientId:idClient,
           },
-        }},{
-          OR:[
+        }},
             {
               state:"Active",
             }
           ]
-        }]
         
       },
       include:{
