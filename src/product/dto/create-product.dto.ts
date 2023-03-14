@@ -47,7 +47,7 @@ export class CreateProductDto {
     @IsNotEmpty()
     celebrityId:number;
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
     lastPrice:number;
 
