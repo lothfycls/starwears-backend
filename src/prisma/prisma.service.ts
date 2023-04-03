@@ -10,7 +10,7 @@ export class PrismaService
     super({
       datasources: {
         db: {
-          url: 'mysql://backendsedihisha_ali:Walid0624680@84.16.234.19:3306/backendsedihisha_database', //link url of backendStarWears
+          url: 'mysql://sql7610504:QeIBdQDlw5@sql7.freesqldatabase.com:3306/sql7610504', //link url of backendStarWears
         },
       },
     });
